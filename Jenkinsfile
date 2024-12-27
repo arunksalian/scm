@@ -20,10 +20,10 @@ pipeline {
                 // Build the Java project using Maven (or Gradle)
                 script {
                     // Maven build
-                    sh "mvn clean install"
+                   // sh "mvn clean install"
                     
                     // Alternatively, if you're using Gradle, use the following:
-                    // sh "./gradlew build"
+                     sh "./gradlew build"
                 }
             }
         }
