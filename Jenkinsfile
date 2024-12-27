@@ -29,6 +29,11 @@ pipeline {
             }
         }
 
+        stage('Build Image') {
+            steps {
+                docker.build(".")
+            }
+        }
     }
 
     post {
