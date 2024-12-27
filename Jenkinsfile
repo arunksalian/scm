@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define environment variables if necessary
-        MAVEN_HOME = '/usr/local/maven'  
+        MAVEN_HOME = '/opt/maven'  
         JAVA_HOME = '/opt/java'    // Adjust the Java path as per your setup
     }
 
@@ -20,7 +20,7 @@ pipeline {
                 // Build the Java project using Maven (or Gradle)
                 script {
                     // Maven build
-                    sh "mvn clean install"
+                    sh "$MAVEN_HOME/bin/mvn clean install"
                     
                     // Alternatively, if you're using Gradle, use the following:
                     // sh "./gradlew build"
