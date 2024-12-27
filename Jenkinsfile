@@ -30,7 +30,7 @@ pipeline {
         }
 
         stage('Build Image') {
-            docker.build(".")
+            //docker.build(".")
         }
     }
 
