@@ -30,7 +30,7 @@ pipeline {
         }
 
         stage('Build Image') {
-            //docker.build(".")
+            app = docker.build("accountmanget/am")    
         }
     }
 
