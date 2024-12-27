@@ -11,8 +11,7 @@ RUN apt-get update && \
 
 # Verify Maven installation
 RUN mvn --version
-ENV JAVA_HOME java-17-openjdk-amd64/java-17-openjdk-amd64
-RUN export JAVA_HOME
+
 
 # Switch back to the Jenkins user
 USER jenkins
