@@ -28,14 +28,7 @@ pipeline {
                 }
             }
         }
-        
-        stage('Post-build') {
-            steps {
-                // Add steps for post-build actions, like archiving artifacts, tests, etc.
-                archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
-                junit '**/target/test-*.xml'  // Optional: If you're using JUnit for test results
-            }
-        }
+
     }
 
     post {
