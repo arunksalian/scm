@@ -4,7 +4,7 @@ pipeline {
     environment {
         // Define environment variables if necessary
         MAVEN_HOME = '/opt/maven'  
-        JAVA_HOME = '/opt/java'    // Adjust the Java path as per your setup
+         // Adjust the Java path as per your setup
     }
 
     stages {
