@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define environment variables if necessary
-        MAVEN_HOME = '/usr/share/maven'  
+        MAVEN_HOME = '/usr/local/maven'  
         JAVA_HOME = '/opt/java'    // Adjust the Java path as per your setup
     }
 
