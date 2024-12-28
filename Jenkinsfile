@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define environment variables if necessary
-       // MAVEN_HOME = '/opt/maven' 
+       MAVEN_HOME1 = '/opt/maven' 
       // JAVA_HOME= '/opt/java/openjdk'
          // Adjust the Java path as per your setup
     }
