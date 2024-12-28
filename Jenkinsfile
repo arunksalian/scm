@@ -12,7 +12,8 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout the code from your Git repository
-                git 'https://github.com/arunksalian/accountmanager.git'
+                 git url: 'https://github.com/arunksalian/accountmanager.git'
+                //git 'https://github.com/arunksalian/accountmanager.git'
             }
         }
         
