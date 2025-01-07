@@ -1,115 +1,68 @@
 pipeline {
     agent {
         kubernetes {
+            cloud 'kubernetes'
             yaml """
----
-    apiVersion: v1
-        kind: Pod
-        metadata:
-          labels:
-            app: jenkins-agent
-	    jenkins/jenkins-jenkins-agent: "true"
-        spec:
-          containers:
-          - name: node
-            image: node:18-alpine
-            command:
-            - cat
-            tty: true
-          - name: maven
-            image: maven:3.8.3-openjdk-17
-            command:
-            - cat
-            tty: true
-            volumeMounts:
-            - mountPath: "/root/.m2/repository/"
-              name: cache
-          - name: java-node
-            image: timbru31/java-node
-            command:
-            - cat
-            tty: true
-          - name: git
-            image: bitnami/git:latest
-            command:
-            - cat
-            tty: true
-          - name: kaniko
-            image: gcr.io/kaniko-project/executor:debug
-            command:
-            - cat
-            tty: true
-            volumeMounts:
-            - mountPath: "/workspace"
-              name: "workspace-volume"
-              readOnly: false
-            - name: kaniko-secret
-              mountPath: /kaniko/.docker             
-          volumes:
-          - name: cache
-            persistentVolumeClaim:
-              claimName: pvc-maven-cache
-          - name: kaniko-secret
-            secret:
-              secretName: registry-credential
-              items:
-                - key: .dockerconfigjson
-                  path: config.json
-
-
-            """
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: jenkins-agent
+spec:
+  containers:
+  - name: jnlp
+    image: jenkins/inbound-agent:4.3-11
+    args: ['\$(JENKINS_SECRET)', '\$(JENKINS_NAME)']
+  - name: build
+    image: maven:3.8.5-openjdk-11
+    command:
+    - cat
+    tty: true
+  - name: node
+    image: node:16
+    command:
+    - cat
+    tty: true
+"""
         }
     }
-
-    environment {
-        // Define environment variables if necessary
-       MAVEN_HOME1 = '/opt/maven' 
-      // JAVA_HOME= '/opt/java/openjdk'
-         // Adjust the Java path as per your setup
-    }
-
     stages {
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
-                // Checkout the code from your Git repository
-                 git url: 'https://github.com/arunksalian/accountmanager.git'
-                //git 'https://github.com/arunksalian/accountmanager.git'
+                container('jnlp') {
+                    sh 'echo Checking out code...'
+                    checkout scm
+                }
             }
         }
-        
         stage('Build') {
             steps {
-                // Build the Java project using Maven (or Gradle)
-                script {
-                    // Maven build
-                    sh "echo $JAVA_HOME"
-                    sh "mvn clean install"
-                    
-                    // Alternatively, if you're using Gradle, use the following:
-                     //sh "./gradlew build"
+                container('build') {
+                    sh 'mvn clean install'
                 }
             }
         }
-
-        stage('Build Image') {
+        stage('Test') {
             steps {
-                script {
-                    app = docker.build("accountmanager/am")  
+                container('build') {
+                    sh 'mvn test'
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                container('node') {
+                    sh 'echo Deploying application...'
+                    // Add deployment commands here
                 }
             }
         }
     }
-
     post {
         always {
-            // Clean up, send notifications, etc.
-            echo 'Cleaning up after the build'
-        }
-        success {
-            echo 'Build completed successfully'
-        }
-        failure {
-            echo 'Build failed'
+            container('jnlp') {
+                echo 'Pipeline completed!'
+            }
         }
     }
 }
