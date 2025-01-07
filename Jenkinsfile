@@ -11,10 +11,9 @@ metadata:
 spec:
   containers:
   - name: jnlp
-    image: jenkins/inbound-agent:4.3-11
-    args: ['\$(JENKINS_SECRET)', '\$(JENKINS_NAME)']
+    image: node:18-alpine
   - name: build
-    image: maven:3.8.5-openjdk-11
+    image: maven:3.8.3-openjdk-17
     command:
     - cat
     tty: true
