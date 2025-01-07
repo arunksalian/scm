@@ -10,13 +10,6 @@ metadata:
     app: jenkins-agent
 spec:
   containers:
-  - name: jnlp
-    image: node:18-alpine
-  - name: build
-    image: maven:3.8.3-openjdk-17
-    command:
-    - cat
-    tty: true
   - name: node
     image: node:16
     command:
@@ -28,7 +21,7 @@ spec:
     stages {
         stage('Checkout Code') {
             steps {
-                container('jnlp') {
+                container('node') {
                     sh 'echo Checking out code...'
                     checkout scm
                 }
