@@ -4,7 +4,7 @@ pipeline {
             yaml """
 ---
     apiVersion: v1
-        kind: "Pod"
+        kind: Pod
         metadata:
           labels:
             app: jenkins-agent
